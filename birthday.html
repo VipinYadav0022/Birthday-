@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Aayushi!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: linear-gradient(120deg, #ff9a9e, #fad0c4);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow: hidden;
+            color: white;
+            margin: 0;
+        }
+        .hidden {
+            display: none;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .cake, .balloons, .candles {
+            width: 120px;
+            margin-top: 20px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 36px;
+        }
+        input {
+            padding: 10px;
+            border: 2px solid white;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 80%;
+            max-width: 250px;
+            text-align: center;
+        }
+        button {
+            padding: 12px 20px;
+            background: #ff4081;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #e91e63;
+            transform: scale(1.1);
+        }
+        .birthday-message {
+            font-size: 22px;
+            margin-top: 20px;
+        }
+        .collage {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .collage img {
+            width: 120px;
+            height: 120px;
+            border-radius: 15px;
+            border: 4px solid white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .collage img:hover {
+            transform: scale(1.1);
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="confettiCanvas"></canvas>
+
+    <div class="container" id="nameForm">
+        <h1>Enter Your Name</h1>
+        <input type="text" id="userName" placeholder="Your Name">
+        <button onclick="showBirthday()">Celebrate 🎉</button>
+    </div>
+
+    <div class="container hidden" id="birthdayMessage">
+        <h1>🎂 Happy Birthday Aayushi Princess! 🎂</h1>
+        <p class="birthday-message" id="personalMessage"></p>
+
+        <!-- Collage Section -->
+        <div class="collage">
+            <img src="1740825512550.jpg" alt="Aayushi Photo 1">
+            <img src="1740825512547.jpg" alt="Aayushi Photo 2">
+            <img src="1740825512540.jpg" alt="Aayushi Photo 3">
+        </div>
+
+        <audio id="birthdayMusic" src="https://www.bensound.com/bensound-music/bensound-happybirthday.mp3" autoplay></audio>
+    </div>
+
+    <script>
+        function showBirthday() {
+            var name = document.getElementById("userName").value;
+            if (name.trim() === "") {
+                alert("Please enter your name!");
+                return;
+            }
+            document.getElementById("nameForm").classList.add("hidden");
+            document.getElementById("birthdayMessage").classList.remove("hidden");
+            document.getElementById("personalMessage").innerHTML = `Dear ${name}, let's celebrate Aayushi's special day! 🎈🎁`;
+            startConfetti();
+            document.getElementById("birthdayMusic").play();
+        }
+
+        function startConfetti() {
+            const canvas = document.getElementById("confettiCanvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            let particles = [];
+            
+            function ConfettiPiece() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height - canvas.height;
+                this.size = Math.random() * 10 + 5;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 3 + 2;
+                this.color = `hsl(${Math.random() * 360}, 100%, 75%)`;
+            }
+            
+            function createConfetti() {
+                for (let i = 0; i < 100; i++) {
+                    particles.push(new ConfettiPiece());
+                }
+            }
+            
+            function animateConfetti() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((p, i) => {
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+                    if (p.y > canvas.height) particles[i] = new ConfettiPiece();
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                requestAnimationFrame(animateConfetti);
+            }
+
+            createConfetti();
+            animateConfetti();
+        }
+    </script>
+
+</body>
+</html>
